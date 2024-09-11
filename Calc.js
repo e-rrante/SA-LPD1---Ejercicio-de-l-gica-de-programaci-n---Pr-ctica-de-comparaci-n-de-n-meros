@@ -1,55 +1,40 @@
-const readline = require('readline')
+const prompt = require('prompt-sync')(); // Importar el módulo prompt-sync
 
-// Crear una interfaz de lectura de datos
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-})
+// Solicitar al usuario tres números
+let num1 = prompt("Introduce el primer número: ");
+let num2 = prompt("Introduce el segundo número: ");
+let num3 = prompt("Introduce el tercer número: ");
 
-// Función para pedir un número al usuario
-function askQuestion(question) {
-    return new Promise((resolve) => {
-        rl.question(question, (answer) => {
-            const number = Number(answer)
-            if (isNaN(number)) {
-                console.log("Por favor, introduce un número válido.");
-                resolve(askQuestion(question))
-            } else {
-                resolve(number)
-            }
-        })
-    })
-}
+// Convertir los valores a números
+num1 = Number(num1);
+num2 = Number(num2);
+num3 = Number(num3);
 
-async function main() {
-    try {
-        const num1 = await askQuestion("Introduce el primer número: ")
-        const num2 = await askQuestion("Introduce el segundo número: ")
-        const num3 = await askQuestion("Introduce el tercer número: ")
+// Verificar si los números son válidos
+if (isNaN(num1) || isNaN(num2) || isNaN(num3)) {
+    console.log("Por favor, introduce valores válidos.");
+} else {
+    // Encontrar el número mayor, menor y del medio
+    let max = Math.max(num1, num2, num3);
+    let min = Math.min(num1, num2, num3);
+    let middle = num1 + num2 + num3 - max - min;
 
-        const numbers = [num1, num2, num3]
+    // Ordenar los números
+    let numbers = [num1, num2, num3];
+    let sortedAscending = numbers.slice().sort((a, b) => a - b);
+    let sortedDescending = numbers.slice().sort((a, b) => b - a);
 
-        const sortedAscending = [...numbers].sort((a, b) => a - b)
+    // Imprimir los números ordenados
+    console.log("Ordenados de mayor a menor:", sortedDescending);
+    console.log("Ordenados de menor a mayor:", sortedAscending);
 
-        const sortedDescending = [...sortedAscending].reverse()
+    // Imprimir los números mayor, del medio y menor
+    console.log(`Mayor: ${max}, Centro: ${middle}, Menor: ${min}`);
 
-        const max = Math.max(num1, num2, num3)
-        const min = Math.min(num1, num2, num3)
-        const middle = num1 + num2 + num3 - max - min
-
-        console.log("Ordenados de mayor a menor:", sortedDescending)
-        console.log("Ordenados de menor a mayor:", sortedAscending)
-
-        console.log(`Mayor: ${max}, Centro: ${middle}, Menor: ${min}`)
-
-        if (num1 === num2 && num2 === num3) {
-            console.log("Los números son iguales.")
-        } else {
-            console.log("Los números no son iguales.")
-        }
-    } finally {
-        rl.close()
+    // Verificar si todos los números son iguales
+    if (num1 === num2 && num2 === num3) {
+        console.log("Los números son iguales.");
+    } else {
+        console.log("Los números no son iguales.");
     }
 }
-
-main();
